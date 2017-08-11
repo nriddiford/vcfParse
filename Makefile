@@ -189,8 +189,7 @@ PERL_ARCHIVEDEP    =
 PERL_ARCHIVE_AFTER = 
 
 
-TO_INST_PM = lib/vcfParse.pm \
-	trinucs.pl
+TO_INST_PM = lib/vcfParse.pm
 
 
 # --- MakeMaker platform_constants section:
@@ -875,8 +874,7 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
-	  'lib/vcfParse.pm' 'blib/lib/vcfParse.pm' \
-	  'trinucs.pl' '$(INST_LIB)/trinucs.pl' 
+	  'lib/vcfParse.pm' 'blib/lib/vcfParse.pm' 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
 

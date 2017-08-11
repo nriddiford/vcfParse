@@ -20,19 +20,20 @@ use Getopt::Long qw/ GetOptions /;
 my $genome_file;
 my $vcf_file;
 my $snv_dist_file = 'combined_snvs.txt';
+my $out_dir = '.';
 my $debug;
 my $quiet;
 my $help;
-my $in_file;
+my $in_file; # Varscan native
 
 # Should add score threshold option
 GetOptions( 'genome=s'				  =>			\$genome_file,
             'infile=s'          =>      \$in_file,
             'vcf=s'						  =>			\$vcf_file,
-     			  'snvs-out=s'        =>	 		\$snv_dist_file,
+     			  'out-file=s'        =>	 		\$snv_dist_file,
+            'dir=s'             =>      \$out_dir,
      			  'help'         		  =>   		\$help,
-     			  'quiet'        		  =>   		\$quiet,
-           	'debug'        		  =>    	\$debug
+     			  'quiet'        		  =>   		\$quiet
 ) or die usage();
 
 if ($help)  { exit usage() }
@@ -228,9 +229,10 @@ sub count {
 
 sub write_dataframe {
   my ($sample, $snv_dist_ref) = @_;
-  open my $snv_dist, '>>',  $snv_dist_file or die $!;
+  my $outlocation = $out_dir . $snv_dist_file;
+  open my $snv_dist, '>>',  $outlocation or die $!;
 
-  say "Printing out genome-wide snv distribution '$snv_dist_file' for $sample...";
+  say "Printing out genome-wide snv distribution '$outlocation' for $sample...";
 
   foreach my $var ( @$snv_dist_ref ) {
 
@@ -240,14 +242,14 @@ sub write_dataframe {
   }
 }
 
-sub debug {
-  my ($chr, $pos, $ref, $alt, $trinuc, $mut_cont) = @_;
-  printf "%-30s %-s\n", "SNV:", $ref;
-  printf "%-30s %-s\n", "Position:", "$chr\:$pos";
-  printf "%-30s %-s\n", "Transition:", "$ref>$alt";
-  printf "%-30s %-s\n", "Trinucleotide:", $trinuc;
-  say "***********";
-}
+# sub debug {
+#   my ($chr, $pos, $ref, $alt, $trinuc, $mut_cont) = @_;
+#   printf "%-30s %-s\n", "SNV:", $ref;
+#   printf "%-30s %-s\n", "Position:", "$chr\:$pos";
+#   printf "%-30s %-s\n", "Transition:", "$ref>$alt";
+#   printf "%-30s %-s\n", "Trinucleotide:", $trinuc;
+#   say "***********";
+# }
 
 sub usage {
   print
