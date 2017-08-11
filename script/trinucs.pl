@@ -21,8 +21,6 @@ my $genome_file;
 my $vcf_file;
 my $snv_dist_file = 'combined_snvs.txt';
 my $out_dir = '.';
-my $debug;
-my $quiet;
 my $help;
 my $in_file; # Varscan native
 
@@ -32,13 +30,10 @@ GetOptions( 'genome=s'				  =>			\$genome_file,
             'vcf=s'						  =>			\$vcf_file,
      			  'out-file=s'        =>	 		\$snv_dist_file,
             'dir=s'             =>      \$out_dir,
-     			  'help'         		  =>   		\$help,
-     			  'quiet'        		  =>   		\$quiet
+     			  'help'         		  =>   		\$help
 ) or die usage();
 
 if ($help)  { exit usage() }
-if ($quiet) { say "Running in quiet mode" }
-if ($debug) { say "Running in debug mode" }
 
 unless ($in_file or $vcf_file ) { exit usage() }
 
@@ -221,7 +216,7 @@ sub count {
     my $snp_count = $snp_freq{$chrom}{$ref}{$alt};
     # my ($mut_cont) = eval sprintf('%.1f', $snp_count/$snp_count{$chr} * 100);
 
-    debug($chrom, $pos, $ref, $alt, $trinuc) if $debug;
+    # debug($chrom, $pos, $ref, $alt, $trinuc) if $debug;
 
   }
   return($sample, \@snv_dist);
@@ -254,7 +249,7 @@ sub write_dataframe {
 sub usage {
   print
 "
-usage: $Script [-h] [-v VCF_IN] [-g GENOME] [-a ALLSNVS] [-c CHROMSNVS] [-q QUIET] [-d DEBUG]
+usage: $Script [-h] [-v VCF_IN] [-g GENOME]
 
 trinucs
 author: Nick Riddiford (nick.riddiford\@curie.fr)
@@ -262,15 +257,13 @@ version: v0.1
 description: Get trinucleotide context from VCF file
 
 arguments:
-  -h, --help            show this help message and exit
-  -v VCF_IN, --vcf      vcf input file
-  -g GENOME, --genome
-                        genome fasta file
-  -a ALLSNVS, --all-snvs
-                        specify name of output file for all snvs
-  -c CHROMSNVS, --chrom-snvs
-                        specify name of output file for snvs per chromosome
-  -q QUIET, --quiet     run in quet mode
-  -d DEBUG, --debug     run in debug mode
+  -h, --help              show this help message and exit
+  -v vcf_file, --vcf      vcf input file
+  -g genome, --genome
+                          genome fasta file
+  -o out-file, --out
+                          name of file to write [Default 'combined_snvs.txt']
+  -d out-directory, --dir
+                          directory to write to [Default cwd]
 "
 }
