@@ -7,7 +7,7 @@ use FindBin '$Script';
 use FindBin qw($Bin);
 
 use File::Spec;
-use lib File::Spec->catdir($FindBin::Bin, 'lib/');
+use lib File::Spec->catdir($FindBin::Bin, '..', 'lib/');
 
 use vcfParse;
 
@@ -19,8 +19,6 @@ use Getopt::Long qw/ GetOptions /;
 
 my $genome_file;
 my $vcf_file;
-my $chrom_out_file = 'chroms.trinucs.txt';
-my $genome_out_file = 'GW.trinucs.txt';
 my $snv_dist_file = 'combined_snvs.txt';
 my $debug;
 my $quiet;
@@ -28,14 +26,13 @@ my $help;
 my $in_file;
 
 # Should add score threshold option
-GetOptions( 'genome=s'				=>			\$genome_file,
-            'infile=s'        =>      \$in_file,
-            'vcf=s'						=>			\$vcf_file,
-     			  'all-snvs=s'    	=>	 		\$genome_out_file,
-     			  'chrom-snvs=s'    =>	 		\$chrom_out_file,
-     			  'help'         		=>   		\$help,
-     			  'quiet'        		=>   		\$quiet,
-           	'debug'        		=>    	\$debug
+GetOptions( 'genome=s'				  =>			\$genome_file,
+            'infile=s'          =>      \$in_file,
+            'vcf=s'						  =>			\$vcf_file,
+     			  'snvs-out=s'        =>	 		\$snv_dist_file,
+     			  'help'         		  =>   		\$help,
+     			  'quiet'        		  =>   		\$quiet,
+           	'debug'        		  =>    	\$debug
 ) or die usage();
 
 if ($help)  { exit usage() }
@@ -99,9 +96,6 @@ sub parse_varscan {
   return(\@vars);
 }
 
-my %data;
-
-
 sub parse_vcf {
   my $vcf_file = shift;
 
@@ -122,8 +116,6 @@ sub parse_vcf {
       my (%sample_info)  = @{ $info->{$_}->[6] };
 
       my $af;
-
-      # print Dumper \%sample_info;
 
       if ($sample_info{$_}{'TUMOR'}{'AF'}){
         $caller = 'mutect2';
