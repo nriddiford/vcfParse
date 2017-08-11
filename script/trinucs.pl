@@ -5,12 +5,10 @@ use Data::Dumper;
 use feature qw/ say /;
 use FindBin '$Script';
 use FindBin qw($Bin);
-
 use File::Spec;
 use lib File::Spec->catdir($FindBin::Bin, '..', 'lib/');
 
 use vcfParse;
-
 
 use Bio::SeqIO;
 use File::Basename;
@@ -40,17 +38,14 @@ unless ($in_file or $vcf_file ) { exit usage() }
 my %chroms = qw / 2L 23513712 2R 25286936 3L 28110227 3R 32079331 4 1348131 X 23542271 Y 3667352 /;
 
 my $genome_ref = get_genome($genome_file);
-
 my %genome = %{$genome_ref};
-
 my $data_ref;
-
 $data_ref = parse_vcf($vcf_file) if $vcf_file;
 # $data_ref = parse_varscan($in_file) if $in_file;
-#
 my ($filtered_data_ref) = get_context($data_ref);
 my ($sample, $snv_dist_ref) = count($filtered_data_ref);
 
+# Write to R-friendly dataframe
 write_dataframe($sample, $snv_dist_ref);
 
 sub get_genome {
@@ -96,7 +91,6 @@ sub parse_vcf {
   my $vcf_file = shift;
 
   my ( $name, $extention ) = split(/\.([^.]+)$/, basename($vcf_file), 2);
-  my $VCF_in;
   my ($sample) = split(/_/, $name, 0);
 
   say "Parsing VCF file...";
@@ -201,29 +195,16 @@ sub count {
     my ($samp, $chrom, $pos, $ref, $alt, $af, $caller, $trinuc, $trans_trinuc, $grouped_ref, $grouped_alt) = @$var;
     $sample = $samp;
 
-    # $genome_wide_snvs{$trinuc}{"$ref>$alt"}++;		# count genome-wide trinuc transformations: "A>C"
-    #
-    # $snvs_by_chrom{$chrom}{$trinuc}{"$ref>$alt"}++;	# count chromosome-wide trinuc transformations: 2L "A>C"
-    #
-    # $snp_freq{$chrom}{$ref}{$alt}++; 					      # count total transformations by type (e.g. `A` -> `G`) per chromosome
-    # $snp_count{$chrom}++; 							            # count total transformations per chromosome
-    # $all_snvs_count++; 								            # count total transformations
-    # $tri_count{$chrom}++;								            # count total trinucs per chromosome
-
-    # Record location of each snv per sample
     push @snv_dist, [ $sample, $chrom, $pos, $ref, $alt, $af, $caller, $trinuc, "$ref>$alt", $trans_trinuc, "$grouped_ref>$grouped_alt" ];
 
-    my $snp_count = $snp_freq{$chrom}{$ref}{$alt};
-    # my ($mut_cont) = eval sprintf('%.1f', $snp_count/$snp_count{$chr} * 100);
-
     # debug($chrom, $pos, $ref, $alt, $trinuc) if $debug;
-
   }
   return($sample, \@snv_dist);
 }
 
 sub write_dataframe {
   my ($sample, $snv_dist_ref) = @_;
+
   my $outlocation = $out_dir . $snv_dist_file;
   open my $snv_dist, '>>',  $outlocation or die $!;
 
