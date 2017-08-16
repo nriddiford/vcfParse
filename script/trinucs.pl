@@ -4,9 +4,9 @@ use strict;
 use Data::Dumper;
 use feature qw/ say /;
 use FindBin '$Script';
-use FindBin qw($Bin);
-use File::Spec;
-use lib File::Spec->catdir($FindBin::Bin, '..', 'lib/');
+# use FindBin qw($Bin);
+# use File::Spec;
+# use lib File::Spec->catdir($FindBin::Bin, '..', 'lib/');
 
 use vcfParse;
 
@@ -18,7 +18,7 @@ use Getopt::Long qw/ GetOptions /;
 my $genome_file;
 my $vcf_file;
 my $snv_dist_file = 'combined_snvs.txt';
-my $out_dir = '.';
+my $out_dir = './';
 my $help;
 my $in_file; # Varscan native
 

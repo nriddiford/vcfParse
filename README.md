@@ -1,25 +1,47 @@
-vcfParse
+# vcfParse
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+A perl module to parse vcf files for easy filtering
 
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it to get an idea of the module's uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+## Installation
 
+Install from github:
 
-INSTALLATION
+```
+git clone https://github.com/nriddiford/vcfParse.git
+cd mutationProfiles
+```
 
-To install this module, run the following commands:
+Install module:
 
+```
 	perl Makefile.PL
 	make
 	make test
 	make install
+```
+
+## Call vcfParse from script:
+
+```{perl}
+use vcfParse;
+
+my $vcf_file = 'in_file.vcf';
+
+my ( $data, $info_fields, $filtered_vars ) = vcfParse::parse($vcf_file);
+
+for ( sort { @{ $data->{$a}}[0] cmp @{ $data->{$b}}[0] or
+		 @{ $data->{$a}}[1] <=> @{ $data->{$b}}[1]
+	 }  keys %{ $data } ){
+	 my ( $chrom, $pos, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $filters, $samples ) = @{ $data->{$_} };
+	 my (%sample_info)  = @{ $info->{$_}->[6] };
+
+	 if ($sample_info{$_}{'TUMOR'}{'AF'}){
+		 print "Allele frequency = "$sample_info{$_}{'TUMOR'}{'AF'}\n";
+	 }
+	 ...
+ }
+```
+
 
 SUPPORT AND DOCUMENTATION
 
@@ -27,20 +49,6 @@ After installing, you can find documentation for this module with the
 perldoc command.
 
     perldoc vcfParse
-
-You can also look for information at:
-
-    RT, CPAN's request tracker (report bugs here)
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=vcfParse
-
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/vcfParse
-
-    CPAN Ratings
-        http://cpanratings.perl.org/d/vcfParse
-
-    Search CPAN
-        http://search.cpan.org/dist/vcfParse/
 
 
 LICENSE AND COPYRIGHT
@@ -82,4 +90,3 @@ YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR
 CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
 CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
