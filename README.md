@@ -14,10 +14,10 @@ cd mutationProfiles
 Install module:
 
 ```
-	perl Makefile.PL
-	make
-	make test
-	make install
+perl Makefile.PL
+make
+make test
+make install
 ```
 
 ## Call vcfParse from script:
