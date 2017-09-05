@@ -8,7 +8,7 @@ Install from github:
 
 ```
 git clone https://github.com/nriddiford/vcfParse.git
-cd mutationProfiles
+cd vcfParse
 ```
 
 Install module:
