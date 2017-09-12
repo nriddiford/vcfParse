@@ -71,7 +71,7 @@
 .\" ========================================================================
 .\"
 .IX Title "vcfParse 3"
-.TH vcfParse 3 "2017-08-11" "perl v5.18.2" "User Contributed Perl Documentation"
+.TH vcfParse 3 "2017-09-12" "perl v5.18.2" "User Contributed Perl Documentation"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -81,17 +81,23 @@ vcfParse \- The great new vcfParse!
 .SH "VERSION"
 .IX Header "VERSION"
 Version 0.01
-.SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
-Quick summary of what the module does.
-.PP
-Perhaps a little code snippet.
-.PP
-.Vb 1
-\&    use vcfParse;
+.SH "SYNOPSIS use vcfParse;"
+.IX Header "SYNOPSIS use vcfParse;"
+.Vb 2
+\& my $vcf_file = \*(Aqin_file.vcf\*(Aq;
+\& my ( $data, $info_fields, $filtered_vars ) = vcfParse::parse($vcf_file);
 \&
-\&    my $foo = vcfParse\->new();
+\& for ( sort { @{ $data\->{$a}}[0] cmp @{ $data\->{$b}}[0] or
+\&      @{ $data\->{$a}}[1] <=> @{ $data\->{$b}}[1]
+\&    }  keys %{ $data } ){
+\&    my ( $chrom, $pos, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $filters, $samples ) = @{ $data\->{$_} };
+\&    my (%sample_info)  = @{ $info\->{$_}\->[6] };
+\&
+\&    if ($sample_info{$_}{\*(AqTUMOR\*(Aq}{\*(AqAF\*(Aq}){
+\&      print "Allele frequency = "$sample_info{$_}{\*(AqTUMOR\*(Aq}{\*(AqAF\*(Aq}\en";
+\&    }
 \&    ...
+\&  }
 .Ve
 .SH "EXPORT"
 .IX Header "EXPORT"
@@ -118,22 +124,10 @@ You can find documentation for this module with the perldoc command.
 .Ve
 .PP
 You can also look for information at:
-.IP "\(bu" 4
-\&\s-1RT: CPAN\s0's request tracker (report bugs here)
+.IP "\(bu" 1
+Github
 .Sp
-<http://rt.cpan.org/NoAuth/Bugs.html?Dist=vcfParse>
-.IP "\(bu" 4
-AnnoCPAN: Annotated \s-1CPAN\s0 documentation
-.Sp
-<http://annocpan.org/dist/vcfParse>
-.IP "\(bu" 4
-\&\s-1CPAN\s0 Ratings
-.Sp
-<http://cpanratings.perl.org/d/vcfParse>
-.IP "\(bu" 4
-Search \s-1CPAN\s0
-.Sp
-<http://search.cpan.org/dist/vcfParse/>
+<https://github.com/nriddiford/vcfParse>
 .SH "ACKNOWLEDGEMENTS"
 .IX Header "ACKNOWLEDGEMENTS"
 .SH "LICENSE AND COPYRIGHT"

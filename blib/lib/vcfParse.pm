@@ -18,20 +18,46 @@ our $VERSION = '0.01';
 
 
 =head1 SYNOPSIS
+ use vcfParse;
 
-Quick summary of what the module does.
+ my $vcf_file = 'in_file.vcf';
+ my ( $data, $info_fields, $filtered_vars ) = vcfParse::parse($vcf_file);
 
-Perhaps a little code snippet.
+ for ( sort { @{ $data->{$a}}[0] cmp @{ $data->{$b}}[0] or
+      @{ $data->{$a}}[1] <=> @{ $data->{$b}}[1]
+    }  keys %{ $data } ){
+    my ( $chrom, $pos, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $filters, $samples ) = @{ $data->{$_} };
+    my (%sample_info)  = @{ $info->{$_}->[6] };
 
-    use vcfParse;
-
-    my $foo = vcfParse->new();
+    if ($sample_info{$_}{'TUMOR'}{'AF'}){
+      print "Allele frequency = "$sample_info{$_}{'TUMOR'}{'AF'}\n";
+    }
     ...
+  }
+
 
 =head1 EXPORT
 
 A list of functions that can be exported.  You can delete this section
 if you don't export anything, such as for a purely object-oriented module.
+
+=cut
+
+require Exporter;
+
+  our @ISA = qw(Exporter);
+
+  our %EXPORT_TAGS = (
+          'all' => [ qw(
+                          parse
+                  ) ]
+  );
+
+  our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
+
+  our @EXPORT = qw(
+                          parse
+  );
 
 =head1 SUBROUTINES/METHODS
 
@@ -45,7 +71,7 @@ sub parse {
 
   my @headers;
 
-  my (%snvs, %info, %filtered_snvs);
+  my (%snvs, %info, %variants);
   my ($tumour_name, $control_name);
   my %format_long;
   my %info_long;
@@ -58,7 +84,7 @@ sub parse {
 
     if (/^#{2}/){
        push @headers, $_;
-      $filtered_snvs{$.} = $_;
+       $variants{$.} = $_;
 
       if (/##FORMAT/){
 
@@ -76,8 +102,8 @@ sub parse {
     }
 
     if (/^#{1}/){
-       push @headers, $_;
-      $filtered_snvs{$.} = $_;
+      push @headers, $_;
+      $variants{$.} = $_;
       my @split = split;
       push @samples, $_ foreach @split[9..$#split];
 
@@ -113,41 +139,6 @@ sub parse {
     }
 
     my @filter_reasons;
-
-    #######################
-    # Allele depth filter #
-    #######################
-
-    # # Filter if alt AD < 2
-    # if ($sample_info{$id}{'TUMOR'}{'AD'}){
-    #   my ($ref_ad, $alt_ad) = split(/,/, $sample_info{$id}{'TUMOR'}{'AD'});
-    #   if ($alt_ad < 2){
-    #     # say "Alt allele depth filt: $alt_ad";
-    #     push @filter_reasons, "alt\_AD=" . $sample_info{$id}{'TUMOR'}{'AD'};
-    #   }
-    #
-    #   # Filter if alt AD + ref AD < 5
-    #   if ($alt_ad + $ref_ad < 5){
-    #     my $sample_depth = $alt_ad + $ref_ad;
-    #     # say "Sample depth filt: $sample_depth";
-    #     push @filter_reasons, "AD=" . $sample_depth;
-    #   }
-    #   # Filter if normal alt AD != 0
-    #   my ($n_ref_ad, $n_alt_ad ) = split(/,/, $sample_info{$id}{'NORMAL'}{'AD'});
-    #   if ($n_alt_ad != 0){
-    #     # say "Normal alt allele depth filt: $n_alt_ad";
-    #     push @filter_reasons, "NORM_alt_AD=" . $n_alt_ad;
-    #   }
-    # }
-    #
-    # if ($sample_info{$id}{'TUMOR'}{'AF'}){
-    #   my $af = $sample_info{$id}{'TUMOR'}{'AF'};
-    #   if ($af < 0.075){
-    #     # say "Allele freq filt: $af";
-    #     push @filter_reasons, "TUM\_AF=" . $sample_info{$id}{'TUMOR'}{'AF'};
-    #   }
-    # }
-
     my %information;
 
     foreach(@info_parts){
@@ -170,12 +161,12 @@ sub parse {
     $info{$id} = [ [@format], [%format_long], [%info_long], [@tumour_parts], [@normal_parts], [%information], [%sample_info] ];
 
     if ( scalar @filter_reasons == 0 ){
-      $filtered_snvs{$.} = $_;
+      $variants{$.} = $_;
     }
 
   }
 
-  return (\%snvs, \%info, \%filtered_snvs);
+  return (\%snvs, \%info, \%variants);
 }
 
 
@@ -190,8 +181,6 @@ the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=vcfParse>.
 automatically be notified of progress on your bug as I make changes.
 
 
-
-
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
@@ -201,23 +190,11 @@ You can find documentation for this module with the perldoc command.
 
 You can also look for information at:
 
-=over 4
+=over 1
 
-=item * RT: CPAN's request tracker (report bugs here)
+=item * Github
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=vcfParse>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/vcfParse>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/vcfParse>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/vcfParse/>
+L<https://github.com/nriddiford/vcfParse>
 
 =back
 
