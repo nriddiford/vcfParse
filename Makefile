@@ -189,7 +189,8 @@ PERL_ARCHIVEDEP    =
 PERL_ARCHIVE_AFTER = 
 
 
-TO_INST_PM = lib/vcfParse.pm
+TO_INST_PM = README.pod \
+	lib/vcfParse.pm
 
 
 # --- MakeMaker platform_constants section:
@@ -874,6 +875,7 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
+	  'README.pod' '$(INST_LIB)/README.pod' \
 	  'lib/vcfParse.pm' 'blib/lib/vcfParse.pm' 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
