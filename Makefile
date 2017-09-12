@@ -487,7 +487,7 @@ realclean purge :: realclean_subdirs
 metafile : create_distdir
 	$(NOECHO) $(ECHO) Generating META.yml
 	$(NOECHO) $(ECHO) '---' > META_new.yml
-	$(NOECHO) $(ECHO) 'abstract: '\''The great new vcfParse!'\''' >> META_new.yml
+	$(NOECHO) $(ECHO) 'abstract: '\''Easy parsing of VCF files'\''' >> META_new.yml
 	$(NOECHO) $(ECHO) 'author:' >> META_new.yml
 	$(NOECHO) $(ECHO) '  - '\''Nick Riddiford <nick.riddiford@curie.fr>'\''' >> META_new.yml
 	$(NOECHO) $(ECHO) 'build_requires:' >> META_new.yml
@@ -512,7 +512,7 @@ metafile : create_distdir
 	-$(NOECHO) $(MV) META_new.yml $(DISTVNAME)/META.yml
 	$(NOECHO) $(ECHO) Generating META.json
 	$(NOECHO) $(ECHO) '{' > META_new.json
-	$(NOECHO) $(ECHO) '   "abstract" : "The great new vcfParse!",' >> META_new.json
+	$(NOECHO) $(ECHO) '   "abstract" : "Easy parsing of VCF files",' >> META_new.json
 	$(NOECHO) $(ECHO) '   "author" : [' >> META_new.json
 	$(NOECHO) $(ECHO) '      "Nick Riddiford <nick.riddiford@curie.fr>"' >> META_new.json
 	$(NOECHO) $(ECHO) '   ],' >> META_new.json
@@ -861,7 +861,7 @@ testdb_static :: static pure_all
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd :
 	$(NOECHO) $(ECHO) '<SOFTPKG NAME="vcfParse" VERSION="0.02">' > vcfParse.ppd
-	$(NOECHO) $(ECHO) '    <ABSTRACT>The great new vcfParse!</ABSTRACT>' >> vcfParse.ppd
+	$(NOECHO) $(ECHO) '    <ABSTRACT>Easy parsing of VCF files</ABSTRACT>' >> vcfParse.ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Nick Riddiford &lt;nick.riddiford@curie.fr&gt;</AUTHOR>' >> vcfParse.ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> vcfParse.ppd
 	$(NOECHO) $(ECHO) '        <PERLCORE VERSION="5,006,0,0" />' >> vcfParse.ppd

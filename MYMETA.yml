@@ -1,5 +1,5 @@
 ---
-abstract: 'The great new vcfParse!'
+abstract: 'Easy parsing of VCF files'
 author:
   - 'Nick Riddiford <nick.riddiford@curie.fr>'
 build_requires:

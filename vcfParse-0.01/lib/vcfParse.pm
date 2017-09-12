@@ -4,9 +4,25 @@ use 5.006;
 use strict;
 use warnings;
 
+require Exporter;
+
+  our @ISA = qw(Exporter);
+
+  our %EXPORT_TAGS = (
+          'all' => [ qw(
+                          parse
+                  ) ]
+  );
+
+  our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
+
+  our @EXPORT = qw(
+                          parse
+  );
+
 =head1 NAME
 
-vcfParse - The great new vcfParse!
+vcfParse - Easy parsing of VCF files
 
 =head1 VERSION
 
@@ -15,7 +31,6 @@ Version 0.02
 =cut
 
 our $VERSION = '0.02';
-
 
 =head1 SYNOPSIS
  use vcfParse;
@@ -35,33 +50,11 @@ our $VERSION = '0.02';
     ...
   }
 
-
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
 =cut
-
-require Exporter;
-
-  our @ISA = qw(Exporter);
-
-  our %EXPORT_TAGS = (
-          'all' => [ qw(
-                          parse
-                  ) ]
-  );
-
-  our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
-
-  our @EXPORT = qw(
-                          parse
-  );
 
 =head1 SUBROUTINES/METHODS
 
-=head2 parse
+=head2 parse()
 
 =cut
 
@@ -172,7 +165,7 @@ sub parse {
 
 =head1 AUTHOR
 
-Nick Riddiford, C<< <nick.riddiford at curie.fr> >>
+Nick Riddiford, C<nick.riddiford@curie.fr>
 
 =head1 BUGS
 
@@ -181,13 +174,11 @@ or via the GitHub issues page L<https://github.com/nriddiford/vcfParse/issues>
 
 =head1 SUPPORT
 
-L<https://github.com/nriddiford/vcfParse/blob/master/README.md>
-
 =over 1
 
-=item * Github
+=item Github: L<https://github.com/nriddiford/vcfParse/blob/master/README.md>
 
-<https://github.com/nriddiford/vcfParse>
+=item perdoc: 'perldoc vcfParse'
 
 =back
 
