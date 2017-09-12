@@ -18,15 +18,23 @@ our $VERSION = '0.01';
 
 
 =head1 SYNOPSIS
+ use vcfParse;
 
-Quick summary of what the module does.
+ my $vcf_file = 'in_file.vcf';
+ my ( $data, $info_fields, $filtered_vars ) = vcfParse::parse($vcf_file);
 
-Perhaps a little code snippet.
+ for ( sort { @{ $data->{$a}}[0] cmp @{ $data->{$b}}[0] or
+      @{ $data->{$a}}[1] <=> @{ $data->{$b}}[1]
+    }  keys %{ $data } ){
+    my ( $chrom, $pos, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $filters, $samples ) = @{ $data->{$_} };
+    my (%sample_info)  = @{ $info->{$_}->[6] };
 
-    use vcfParse;
-
-    my $foo = vcfParse->new();
+    if ($sample_info{$_}{'TUMOR'}{'AF'}){
+      print "Allele frequency = "$sample_info{$_}{'TUMOR'}{'AF'}\n";
+    }
     ...
+  }
+
 
 =head1 EXPORT
 
@@ -217,23 +225,11 @@ You can find documentation for this module with the perldoc command.
 
 You can also look for information at:
 
-=over 4
+=over 1
 
-=item * RT: CPAN's request tracker (report bugs here)
+=item * Github
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=vcfParse>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/vcfParse>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/vcfParse>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/vcfParse/>
+L<https://github.com/nriddiford/vcfParse>
 
 =back
 
