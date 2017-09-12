@@ -10,11 +10,11 @@ vcfParse - The great new vcfParse!
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 =head1 SYNOPSIS
@@ -176,31 +176,20 @@ Nick Riddiford, C<< <nick.riddiford at curie.fr> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-vcfparse at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=vcfParse>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
+Please report any bugs or feature requests to C<nick.riddiford@curie.fr>,
+or via the GitHub issues page L<https://github.com/nriddiford/vcfParse/issues>
 
 =head1 SUPPORT
 
-You can find documentation for this module with the perldoc command.
-
-    perldoc vcfParse
-
-
-You can also look for information at:
+L<https://github.com/nriddiford/vcfParse/blob/master/README.md>
 
 =over 1
 
 =item * Github
 
-L<https://github.com/nriddiford/vcfParse>
+<https://github.com/nriddiford/vcfParse>
 
 =back
-
-
-=head1 ACKNOWLEDGEMENTS
-
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -210,7 +199,7 @@ This program is free software; you can redistribute it and/or modify it
 under the terms of the the Artistic License (2.0). You may obtain a
 copy of the full license at:
 
-L<http://www.perlfoundation.org/artistic_license_2_0>
+<http://www.perlfoundation.org/artistic_license_2_0>
 
 Any use, modification, and distribution of the Standard or Modified
 Versions is governed by this Artistic License. By using, modifying or
@@ -245,4 +234,4 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
 
-1; # End of vcfParse
+1;
