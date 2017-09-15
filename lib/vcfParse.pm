@@ -85,7 +85,7 @@ sub parse {
 
     if (/^#{2}/){
        push @headers, $_;
-       $variants{$.} = $_;
+       #$variants{$.} = $_;
 
       if (/##FORMAT/){
 
@@ -104,7 +104,7 @@ sub parse {
 
     if (/^#{1}/){
       push @headers, $_;
-      $variants{$.} = $_;
+      #$variants{$.} = $_;
       my @split = split;
       push @samples, $_ foreach @split[9..$#split];
 
@@ -139,7 +139,6 @@ sub parse {
       }
     }
 
-    my @filter_reasons;
     my %information;
 
     foreach(@info_parts){
@@ -157,13 +156,11 @@ sub parse {
       $information{$id}{$info_key} = $info_value;
     }
 
-    $snvs{$id} = [ @fields[0..10], \@filter_reasons, \@samples ];
+    $snvs{$id} = [ @fields[0..10] ];
 
     $info{$id} = [ [@format], [%format_long], [%info_long], [@tumour_parts], [@normal_parts], [%information], [%sample_info] ];
 
-    if ( scalar @filter_reasons == 0 ){
-      $variants{$.} = $_;
-    }
+    $variants{$id} = $_;
 
   }
   return (\%snvs, \%info, \%variants, \@headers);
