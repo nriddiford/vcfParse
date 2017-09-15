@@ -81,9 +81,11 @@ vcfParse \- Easy parsing of VCF files
 .SH "VERSION"
 .IX Header "VERSION"
 Version 0.03
-.SH "SYNOPSIS use vcfParse;"
-.IX Header "SYNOPSIS use vcfParse;"
-.Vb 2
+.SH "SYNOPSIS"
+.IX Header "SYNOPSIS"
+.Vb 1
+\& use vcfParse;
+\&
 \& my $vcf_file = \*(Aqin_file.vcf\*(Aq;
 \& my ( $data, $info_fields, $filtered_vars ) = vcfParse::parse($vcf_file);
 \&

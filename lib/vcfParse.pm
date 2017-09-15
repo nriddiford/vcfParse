@@ -33,6 +33,7 @@ Version 0.03
 our $VERSION = '0.03';
 
 =head1 SYNOPSIS
+
  use vcfParse;
 
  my $vcf_file = 'in_file.vcf';
