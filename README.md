@@ -44,8 +44,8 @@ for ( sort { @{ $data->{$a}}[0] cmp @{ $data->{$b}}[0] or
     my (%sample_info)  = @{ $info_fields->{$_}[7] }; # Per-sample info lookup (e.g. $sample_info{$_}{'[sample_name]'}{'[FORMAT_field]'})
 
     if ( $sample_info{$_}{'TUMOR'}{'AF'} ){
-        print "Allele frequency = "$sample_info{$_}{'TUMOR'}{'AF'}\n";
-    }
+        print "Allele frequency = " . "$sample_info{$_}{'TUMOR'}{'AF'}" . "\n";
+    }	 
     # Do more things
 }
 ```
