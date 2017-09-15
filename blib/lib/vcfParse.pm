@@ -160,7 +160,7 @@ sub parse {
 
     $snvs{$id} = [ @fields[0..10], \@filter_reasons, \@samples ];
 
-    $info{$id} = [ [@headers], [@format], [%format_long], [%info_long], [@tumour_parts], [@normal_parts], [%information], [%sample_info] ];
+    $info{$id} = [ [@format], [%format_long], [%info_long], [@tumour_parts], [@normal_parts], [%information], [%sample_info] ];
 
     if ( scalar @filter_reasons == 0 ){
       $variants{$.} = $_;
@@ -168,7 +168,7 @@ sub parse {
 
   }
 
-  return (\%snvs, \%info, \%variants);
+  return (\%snvs, \%info, \%variants, \@headers);
 }
 
 

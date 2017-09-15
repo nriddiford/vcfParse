@@ -16,9 +16,7 @@ require Exporter;
 
   our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
-  our @EXPORT = qw(
-                          parse
-  );
+  our @EXPORT = qw( parse );
 
 =head1 NAME
 
@@ -26,38 +24,39 @@ vcfParse - Easy parsing of VCF files
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head1 SYNOPSIS
 
  use vcfParse;
 
  my $vcf_file = 'in_file.vcf';
- my ( $data, $info_fields, $filtered_vars ) = vcfParse::parse($vcf_file);
+ my ( $data, $info_fields, $filtered_vars, $heads ) = vcfParse::parse($vcf_file);
+
+ my (@headers) = @{$heads};
 
  for ( sort { @{ $data->{$a}}[0] cmp @{ $data->{$b}}[0] or
       @{ $data->{$a}}[1] <=> @{ $data->{$b}}[1]
     }  keys %{ $data } ){
-    my ( $chrom, $pos, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $filters, $samples ) = @{ $data->{$_} };
+    my ( $chrom, $pos, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $filtered_vars, $samples ) = @{ $data->{$_} };
 
-    my (@headers)      = @{ $info_fields->{$_}[0] }; # The header fileds from VCF (starting with '#')
-    my (@format) 		   = @{ $info_fields->{$_}[1] }; # The format field from VCF
-    my (%format_long)  = @{ $info_fields->{$_}[2] }; # The description of the FORMAT field (corresponding to ##FORMAT=<ID=[field] in header)
-    my (%info_long)    = @{ $info_fields->{$_}[3] }; # The description of the INFO field (corresponding to ##INFO=<ID=[field] in header)
-    my (@tumour_parts) = @{ $info_fields->{$_}[4] }; # The tumour values (for each FORMAT feild)
-    my (@normal_parts) = @{ $info_fields->{$_}[5] }; # The normal values (for each FORMAT feild)
-    my (%information)  = @{ $info_fields->{$_}[6] }; # The format field from VCF
-    my (%sample_info)  = @{ $info_fields->{$_}[7] }; # Per-sample info lookup (e.g. $sample_info{$_}{'[sample_name]'}{'[FORMAT_field]'})
+    my (@format) 		  = @{ $info_fields->{$_}[0] }; # The format field from VCF
+ 	  my (%format_long)  = @{ $info_fields->{$_}[1] }; # The description of the FORMAT field (corresponding to ##FORMAT=<ID=[field] in header)
+ 	  my (%info_long)    = @{ $info_fields->{$_}[2] }; # The description of the INFO field (corresponding to ##INFO=<ID=[field] in header)
+ 	  my (@tumour_parts) = @{ $info_fields->{$_}[3] }; # The tumour values (for each FORMAT feild)
+ 	  my (@normal_parts) = @{ $info_fields->{$_}[4] }; # The normal values (for each FORMAT feild)
+ 	  my (%information)  = @{ $info_fields->{$_}[5] }; # The format field from VCF
+ 	  my (%sample_info)  = @{ $info_fields->{$_}[6] }; # Per-sample info lookup (e.g. $sample_info{$_}{'[sample_name]'}{'[FORMAT_field]'})
 
     if ( $sample_info{$_}{'TUMOR'}{'AF'} ){
-      print "Allele frequency = "$sample_info{$_}{'TUMOR'}{'AF'}\n";
+        print "Allele frequency = "$sample_info{$_}{'TUMOR'}{'AF'}\n";
     }
     # Do more things
-  }
+ }
 
 =cut
 
@@ -160,15 +159,14 @@ sub parse {
 
     $snvs{$id} = [ @fields[0..10], \@filter_reasons, \@samples ];
 
-    $info{$id} = [ [@headers], [@format], [%format_long], [%info_long], [@tumour_parts], [@normal_parts], [%information], [%sample_info] ];
+    $info{$id} = [ [@format], [%format_long], [%info_long], [@tumour_parts], [@normal_parts], [%information], [%sample_info] ];
 
     if ( scalar @filter_reasons == 0 ){
       $variants{$.} = $_;
     }
 
   }
-
-  return (\%snvs, \%info, \%variants);
+  return (\%snvs, \%info, \%variants, \@headers);
 }
 
 
