@@ -1,6 +1,0 @@
-Revision history for vcfParse
-
-0.01    11/08
-        First version, released on an unsuspecting world.
-0.02    12/09
-        Remove filter section and rename $filtered_snvs to $variants
