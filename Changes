@@ -7,3 +7,5 @@ Revision history for vcfParse
 0.03    15/09
         Add @headers to $info_fields->{$_}[0]
 	Bulk up README.md and test.pl to explain hash contents
+0.04    15/09
+        Return @headers instead (to print outside of loop)
