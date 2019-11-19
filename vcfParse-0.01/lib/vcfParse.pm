@@ -1,22 +1,20 @@
 package vcfParse;
-
-use 5.006;
 use strict;
 use warnings;
 
 require Exporter;
 
-  our @ISA = qw(Exporter);
+our @ISA = qw(Exporter);
 
-  our %EXPORT_TAGS = (
-          'all' => [ qw(
-                          parse
-                  ) ]
-  );
+our %EXPORT_TAGS = (
+        'all' => [ qw(
+                        parse
+                ) ]
+);
 
-  our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
+our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
-  our @EXPORT = qw( parse );
+our @EXPORT = qw( parse );
 
 =head1 NAME
 
@@ -68,8 +66,8 @@ our $VERSION = '0.04';
 
 sub parse {
   my ($file) = shift;
-  open my $in, '<', $file or die $!;
 
+  open my $in, '<', $file or die $!;
   my @headers;
 
   my (%snvs, %info, %variants);
@@ -88,7 +86,6 @@ sub parse {
        #$variants{$.} = $_;
 
       if (/##FORMAT/){
-
         my ($format_long) = $_ =~ /\"(.*?)\"/;
         my ($available_format_info) = $_ =~ /ID=(.*?),/;
         $format_long{$available_format_info} = $format_long;
@@ -107,14 +104,12 @@ sub parse {
       #$variants{$.} = $_;
       my @split = split;
       push @samples, $_ foreach @split[9..$#split];
-
       $control_name = $samples[0];
       $tumour_name = $samples[1];
       next;
     }
 
     my @fields = split;
-
     my ($chr, $pos, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, @sample_info) = @fields;
 
     if ( $id eq '.' ){
@@ -126,7 +121,11 @@ sub parse {
     push @{$sample_parts{$samples[$_]}}, split(/:/, $sample_info[$_]) for 0..$#samples;
 
     my @normal_parts   = split(/:/, $sample_info[0]);
-    my @tumour_parts   = split(/:/, $sample_info[1]);
+    my @tumour_parts;
+
+    if($sample_info[1]){
+      @tumour_parts = split(/:/, $sample_info[1]);
+    }
 
     my @format        = split(/:/, $format_block);
     my @info_parts    = split(/;/, $info_block);
@@ -163,7 +162,7 @@ sub parse {
     $variants{$id} = $_;
 
   }
-  return (\%snvs, \%info, \%variants, \@headers);
+  return (\%snvs, \%info, \%variants, \@headers, \@samples);
 }
 
 

@@ -40,14 +40,14 @@ DLEXT = bundle
 DLSRC = dl_dlopen.xs
 EXE_EXT = 
 FULL_AR = /usr/bin/ar
-LD = cc -mmacosx-version-min=10.12.5
-LDDLFLAGS = -arch x86_64 -arch i386 -bundle -undefined dynamic_lookup -fstack-protector
-LDFLAGS = -arch x86_64 -arch i386 -fstack-protector
+LD = cc
+LDDLFLAGS =  -bundle -undefined dynamic_lookup -fstack-protector
+LDFLAGS =  -fstack-protector
 LIBC = 
 LIB_EXT = .a
 OBJ_EXT = .o
 OSNAME = darwin
-OSVERS = 16.0
+OSVERS = 18.0
 RANLIB = /usr/bin/ar s
 SITELIBEXP = /Library/Perl/5.18
 SITEARCHEXP = /Library/Perl/5.18/darwin-thread-multi-2level
@@ -167,9 +167,6 @@ O_FILES  =
 H_FILES  = 
 MAN1PODS = 
 MAN3PODS = lib/vcfParse.pm
-
-# Where is the Config information that we are using/depend on
-CONFIGDEP = $(PERL_ARCHLIBDEP)$(DFSEP)Config.pm $(PERL_INCDEP)$(DFSEP)config.h
 
 # Where to build things
 INST_LIBDIR      = $(INST_LIB)
